@@ -107,7 +107,7 @@ int main() {
         while(!file.eof()){
 
 
-            file.read (buffer,10); // читаем в буфер
+            file.read (buffer,100); // читаем в буфер
             size = (int)file.gcount();
 
             for (int i =0; i < size;i++){
