@@ -51,19 +51,23 @@ int main() {
     system ("cls");
     while (!gamersWin && !audienceWin){
 
-        cout << "player number " <<gamer << " is playing"<< endl;
+        cout << "player number " << gamer << " is playing"<< endl;
         cout << "Enter offset: ";
         int offset;
         cin >> offset;
+
         system ("cls");
-        sector += abs(offset)%13;
+
+        sector += abs(offset)%13; // вычисляем сектор
         if (sector >13) {sector -= 13;}
         if (sector == 0) {sector = 1;}
         cout << "sector is " << sector << endl;
 
-        while (!wonBackSectors[sector-1]){
+        while (!wonBackSectors[sector-1]){ // если уже играли в этот сектор
+            //меняем игрока
             if (gamer < gamers){gamer++;}
             else {gamer = 1;}
+
             cout << "you have already played in this sector. Turn goes to player " << gamer << endl;
             cout << "Enter offset: ";
             cin >> offset;
@@ -74,47 +78,54 @@ int main() {
             cout << "sector is " << sector << endl;
         }
 
-        wonBackSectors[sector-1] = false;
-        file.open (filesQuestions[sector-1]);
+        wonBackSectors[sector-1] = false; // присваиваем сектору значение отыгранный
 
+        // работа с вопросом
+        file.open (filesQuestions[sector-1]);
         if (!file.is_open()) {cout << "error"; break;}
 
-        while (!file.eof()){
+        while (!file.eof()){ // выводим вопрос
             string temp;
             file >> temp;
             cout << temp<< " ";
         }
         file.close ();
+        //
 
-
+        //спрашиваем ответ
         string answer;
         cout << endl << "Enter answer: ";
         cin >> answer;
 
-
+        // работа с файлом ответа
         file.open (filesAnswers[sector-1],ios::binary);
 
-        int size = 0;
-        char buffer [100];
-        string rightAnswer;
 
+        string rightAnswer;
+            // читаем правильный ответ
         while(!file.eof()){
-            file.read (buffer,10);
+            int size = 0;
+            char buffer [100];
+
+            file.read (buffer,10); // читаем в буфер
             size = (int)file.gcount();
+
             for (int i =0; i < size;i++){
-                rightAnswer.push_back (buffer[i]);
+                rightAnswer.push_back (buffer[i]); // добавляем из буфера в строку
             }
         }
-
+            // выводим правильный ответ
         cout << "right answer is "<< rightAnswer << endl;
+        // даем очки
         if (answer == rightAnswer){playerPoints ++;cout << "player give point"<<endl;}
         else {audiencePoints++;cout << "audience give point"<<endl;}
-
+            // условие завершения
         if (playerPoints >=6) {gamersWin = true;}
         if (audiencePoints >=6) {audienceWin = true;}
         file.close ();
         system ("cls");
     }
+    // вывод победителя
    if (gamersWin) {cout << "gamers WIN!!!";}
    if (audienceWin) {cout << "gamers Lost. Audience win";}
 }
