@@ -99,13 +99,13 @@ int main() {
 
         // работа с файлом ответа
         file.open (filesAnswers[sector-1],ios::binary);
-
+            int size = 0;
+            char buffer [100];
 
         string rightAnswer;
             // читаем правильный ответ
         while(!file.eof()){
-            int size = 0;
-            char buffer [100];
+
 
             file.read (buffer,10); // читаем в буфер
             size = (int)file.gcount();
